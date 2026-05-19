@@ -1,1 +1,17 @@
+[browser]
+gatherUsageStats = false
 
+[server]
+headless = true
+enableStaticServing = true
+enableCORS = false
+enableXsrfProtection = true
+
+[theme]
+# Tema chiaro di default (leggibile in campo). L'utente può ancora passare al dark dal menu Streamlit.
+base = "light"
+primaryColor = "#2d6a4f"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f7f4"
+textColor = "#1b4332"
+font = "sans serif"
