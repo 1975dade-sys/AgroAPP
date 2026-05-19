@@ -1,6 +1,10 @@
 [browser]
 gatherUsageStats = false
 
+[client]
+# Nasconde menu sviluppatore e riduce la barra Streamlit (footer/toolbar).
+toolbarMode = "minimal"
+
 [server]
 headless = true
 enableStaticServing = true
