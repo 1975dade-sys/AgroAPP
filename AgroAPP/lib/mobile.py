@@ -51,40 +51,35 @@ def _css_responsive() -> str:
       border-color: rgba(128, 128, 128, 0.25) !important;
     }}
 
-    /* Desktop: footer Streamlit nascosto (il menu tema resta in alto ⋮) */
+    /* Footer / branding Streamlit sempre nascosto */
     footer,
-    [data-testid="stFooter"] {{
+    [data-testid="stFooter"],
+    [data-testid="stStatusWidget"],
+    [data-testid="stToolbarActions"],
+    .stDeployButton {{
       display: none !important;
       visibility: hidden !important;
       height: 0 !important;
+      width: 0 !important;
+      opacity: 0 !important;
       pointer-events: none !important;
     }}
 
-    /* Smartphone: icone/link Streamlit in basso o nell'header (no menu impostazioni) */
-    @media (max-width: {_BREAKPOINT}) {{
-      footer,
-      [data-testid="stFooter"],
-      [data-testid="stStatusWidget"],
-      [data-testid="stToolbarActions"],
-      .stDeployButton,
-      [data-testid="stHeader"] a[href*="streamlit.io"],
-      [data-testid="stHeader"] button[title*="Deploy"],
-      [data-testid="stHeader"] button[title*="deploy"] {{
+    /* Smartphone e PWA (Aggiungi a Home): nascondi tutta la barra Streamlit in alto */
+    @media (max-width: {_BREAKPOINT}), (display-mode: standalone) {{
+      header[data-testid="stHeader"] {{
         display: none !important;
-        visibility: hidden !important;
         height: 0 !important;
-        width: 0 !important;
         min-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
         overflow: hidden !important;
-        opacity: 0 !important;
         pointer-events: none !important;
       }}
-
-      /* Spazio in fondo: niente tap accidentali sul bordo */
+      [data-testid="stAppViewContainer"] {{
+        top: 0 !important;
+      }}
       section.main .block-container {{
-        padding-bottom: calc(6rem + env(safe-area-inset-bottom)) !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: calc(6.5rem + env(safe-area-inset-bottom)) !important;
       }}
     }}
 
@@ -261,8 +256,10 @@ def prepara_layout_operativo() -> None:
 
 def configura_mobile() -> None:
     from lib.info_app import inietta_css_brand
+    from lib.theme_ui import applica_tema_css
 
     applica_stili_responsive()
+    st.markdown(applica_tema_css(), unsafe_allow_html=True)
     inietta_css_brand()
     components.html(
         """
@@ -274,6 +271,8 @@ def configura_mobile() -> None:
 
           function hideStreamlitChrome() {
             const mobile = win.matchMedia('(max-width: 768px)').matches;
+            const standalone = win.matchMedia('(display-mode: standalone)').matches;
+            const pwa = mobile || standalone;
             const sel = [
               'footer',
               '[data-testid="stFooter"]',
@@ -287,14 +286,39 @@ def configura_mobile() -> None:
               el.style.setProperty('height', '0', 'important');
               el.style.setProperty('opacity', '0', 'important');
             });
-            if (mobile) {
-              doc.querySelectorAll('a[href*="streamlit.io"]').forEach(function (a) {
-                if (a.closest('footer') || a.closest('[data-testid="stHeader"]')) {
-                  a.style.setProperty('display', 'none', 'important');
-                  a.style.setProperty('pointer-events', 'none', 'important');
-                }
-              });
+            if (pwa) {
+              var hdr = doc.querySelector('header[data-testid="stHeader"]');
+              if (hdr) {
+                hdr.style.setProperty('display', 'none', 'important');
+                hdr.style.setProperty('height', '0', 'important');
+                hdr.style.setProperty('pointer-events', 'none', 'important');
+              }
             }
+            doc.querySelectorAll('a[href*="streamlit.io"], a[href*="share.streamlit"]').forEach(function (a) {
+              if (!a.closest('section.main')) {
+                a.style.setProperty('display', 'none', 'important');
+                a.style.setProperty('pointer-events', 'none', 'important');
+              }
+            });
+            doc.querySelectorAll('button, a, div').forEach(function (el) {
+              if (el.closest('section.main')) return;
+              var t = (el.textContent || '').trim();
+              if (t.indexOf('Made with Streamlit') >= 0 || t === 'Deploy') {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('pointer-events', 'none', 'important');
+              }
+              try {
+                var st = win.getComputedStyle(el);
+                if ((st.position === 'fixed' || st.position === 'sticky') &&
+                    parseFloat(st.bottom) >= 0 && parseFloat(st.bottom) < 120) {
+                  var h = (el.getAttribute('href') || '') + t;
+                  if (h.indexOf('streamlit') >= 0 || el.querySelector('[data-testid="stLogo"]')) {
+                    el.style.setProperty('display', 'none', 'important');
+                    el.style.setProperty('pointer-events', 'none', 'important');
+                  }
+                }
+              } catch (e) {}
+            });
           }
           hideStreamlitChrome();
           win.addEventListener('resize', hideStreamlitChrome);
