@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1acdddf7-bd65-4c09-9ca3-3715e5897d24",
+    "attivo": true,
+    "creato_il": "2026-05-15 18:32",
+    "nome": "Campo Nord (Vigna)",
+    "note": ""
+  },
+  {
+    "id": "6135c9d5-e203-453a-a63a-60d503de8af6",
+    "attivo": true,
+    "creato_il": "2026-05-15 18:32",
+    "nome": "Campo Sud (Mais)",
+    "note": ""
+  },
+  {
+    "id": "6b008c1f-3fc3-4345-954e-54a80ff2f8f3",
+    "attivo": true,
+    "creato_il": "2026-05-15 18:32",
+    "nome": "Appezzamento Est (Uliveto)",
+    "note": ""
+  },
+  {
+    "id": "152b0285-2218-485d-afca-0f340cdee69f",
+    "attivo": true,
+    "creato_il": "2026-05-15 18:37",
+    "nome": "Campo 132",
+    "note": "vicina stazione semiana"
+  },
+  {
+    "id": "f87353bd-8da5-4ef6-9fca-c9fdb3b7b860",
+    "attivo": true,
+    "creato_il": "2026-05-15 18:37",
+    "nome": "Test Campo",
+    "note": "note test"
+  }
+]

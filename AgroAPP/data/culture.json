@@ -1,0 +1,26 @@
+[
+  {
+    "id": "5a0dcf90-8006-4d92-8c49-baebfba281ba",
+    "attivo": true,
+    "creato_il": "2026-05-15 18:41",
+    "nome": "Riso",
+    "prodotto_semina": "Arborio",
+    "note": ""
+  },
+  {
+    "id": "0c1cdaf4-d3f1-45ba-828d-882c772554d0",
+    "attivo": true,
+    "creato_il": "2026-05-15 18:49",
+    "nome": "Mais",
+    "prodotto_semina": "Ibrido 123",
+    "note": ""
+  },
+  {
+    "id": "0f346ae3-6bb9-4342-8757-d9d9f2e8cb43",
+    "attivo": true,
+    "creato_il": "2026-05-18 16:25",
+    "nome": "Mais nero",
+    "prodotto_semina": "Ibrido",
+    "note": ""
+  }
+]

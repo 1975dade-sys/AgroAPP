@@ -1,0 +1,144 @@
+AgroApp — Come aprire il progetto su un altro PC
+================================================
+
+OPZIONE A — Cartella su Google Drive (consigliata)
+-------------------------------------------------
+1. Su questo PC il progetto è in:
+   Il mio Drive\Backup_Progetti\AgroAPP
+
+2. Sul nuovo PC installa Google Drive e attendi la sincronizzazione
+   (oppure copia la cartella AgroAPP su chiavetta USB).
+
+3. Sul nuovo PC installa Python 3.10 o superiore:
+   https://www.python.org/downloads/
+   (spunta "Add Python to PATH" durante l'installazione)
+
+4. Apri PowerShell nella cartella AgroAPP e esegui:
+   pip install -r requirements.txt
+   streamlit run app.py
+
+5. Apri il browser su: http://localhost:8501
+
+   Comando alternativo (se streamlit non è nel PATH):
+   python -m streamlit run app.py
+
+
+ACCESSO UTENTI (titolare e operatori)
+=====================================
+
+Primo avvio
+-----------
+1. All'apertura compare la schermata **Registrazione titolare**.
+2. Inserisci nome, cognome, username e password (minimo 6 caratteri).
+3. Il titolare entra subito e può configurare tutto dal menu **Anagrafiche**.
+
+Titolare
+--------
+- Gestisce campi, culture, prodotti agricoli e operatori.
+- Per ogni operatore imposta: nome, cognome, **mansione**, **username** e **password**.
+- Può reimpostare la password o **revocare l'accesso** in qualsiasi momento.
+- Nel Diario può avviare lavorazioni per sé o per un operatore.
+
+Operatori
+---------
+- Accedono con username e password forniti dal titolare.
+- Vedono solo Home e Diario (nessuna modifica alle anagrafiche).
+- Avviano e chiudono le lavorazioni scegliendo le voci già inserite dal titolare.
+
+File utenti (sul PC, non condividere)
+-------------------------------------
+- data/utenti.json → account e password cifrate (resta in locale)
+- Se migri da una versione precedente, i vecchi nomi in data/operatori.json
+  vengono importati automaticamente: il titolare deve assegnare username e password.
+
+
+INSTALLAZIONE SU SMARTPHONE (Android e iOS)
+==========================================
+
+L'app è in Python/Streamlit: il telefono non esegue il server, ma si collega
+a una copia pubblicata online (consigliato) oppure al PC in casa (solo rete Wi‑Fi).
+
+PASSO 1 — Pubblica l'app su Internet (obbligatorio per installazione comoda)
+----------------------------------------------------------------------------
+1. Crea un account gratuito su https://share.streamlit.io
+2. Carica il progetto su GitHub (cartella AgroAPP, senza secrets.toml)
+3. In Streamlit Cloud: New app → repo → main → app.py
+4. Nelle impostazioni dell'app aggiungi i secrets (copia da secrets.toml)
+5. Ottieni un URL tipo: https://nome-app.streamlit.app
+
+PASSO 2A — Installa come app (PWA, senza store) — più semplice
+----------------------------------------------------------------
+Android (Chrome):
+  1. Apri l'URL Streamlit sul telefono
+  2. Menu ⋮ → "Installa app" / "Aggiungi a schermata Home"
+     (oppure compare il banner verde "Installa" in basso)
+
+iPhone/iPad (Safari):
+  1. Apri l'URL Streamlit in Safari (non in Chrome)
+  2. Tasto Condividi → "Aggiungi a Home"
+  3. L'icona AgroApp apparirà sulla schermata Home
+
+PASSO 2B — App nativa (Play Store / App Store o file APK)
+---------------------------------------------------------
+Richiede Node.js: https://nodejs.org
+
+1. Pubblica l'app su Streamlit Cloud (passo 1)
+2. Apri PowerShell nella cartella mobile\ e esegui:
+     npm install
+     node scripts/set-server-url.js https://TUO-URL.streamlit.app
+     npx cap add android
+     npx cap add ios
+     npx cap sync
+
+3. Android:
+     npx cap open android
+     In Android Studio: Build → Build APK (o pubblica su Play Store)
+
+4. iOS (solo su Mac con Xcode):
+     npx cap open ios
+     In Xcode: firma con Apple Developer → Run su dispositivo o App Store
+
+Cartella mobile\ = contenitore nativo che apre l'URL Streamlit a schermo intero.
+
+
+PASSO 3 — Solo rete di casa (senza cloud, limitato)
+----------------------------------------------------
+1. Avvia sul PC: python -m streamlit run app.py
+2. Sul telefono (stesso Wi‑Fi) apri: http://IP-DEL-PC:8501
+   (l'IP compare nell'output di Streamlit, es. 192.168.x.x)
+3. Android: puoi aggiungere a Home; iOS richiede HTTPS per PWA completa.
+
+
+File PWA (già nel progetto)
+---------------------------
+- static/manifest.json, static/sw.js, static/icon-*.png
+- lib/mobile.py → meta tag iOS + installazione Android
+
+
+OPZIONE B — File ZIP portatile
+------------------------------
+Nella cartella Backup_Progetti trovi:
+   AgroAPP_portatile.zip
+
+1. Copia lo ZIP sul nuovo PC (Drive, USB, email...)
+2. Estrai tutto in una cartella (es. C:\AgroAPP)
+3. Segui i passi 3-5 dell'opzione A
+
+
+File importanti
+---------------
+- app.py              → avvio applicazione
+- requirements.txt    → librerie Python
+- static/             → icone e manifest per installazione mobile (PWA)
+- mobile/             → progetto Capacitor (APK / iOS)
+- scripts/generate_pwa_icons.py → rigenera icone PNG se serve
+- .streamlit/secrets.toml → collegamento al foglio Google (NON condividere)
+- data/utenti.json       → account titolare/operatori (locale, non su GitHub)
+- data/operatori.json    → legacy (import automatico al primo titolare)
+- apps_script/Code.gs → script Google (se devi aggiornare il foglio)
+
+
+Sul nuovo PC non serve rifare Apps Script se secrets.toml è presente.
+I dati delle attività restano sul foglio Google online.
+
+Supporto: riapri il progetto in Cursor nella cartella AgroAPP.
