@@ -3,6 +3,7 @@ import streamlit as st
 
 from lib.auth import etichetta_utente, logout, utente_corrente
 from lib.info_app import render_titolo_agroapp
+from lib.theme_ui import render_selettore_tema
 from lib.utenti import RUOLO_TITOLARE
 
 
@@ -13,7 +14,7 @@ def render_barra_superiore() -> None:
     mansione = user.get("mansione", "")
 
     render_titolo_agroapp(livello=3)
-    st.caption("Tema chiaro/scuro: menu **⋮** in alto a destra → Settings → Theme.")
+    render_selettore_tema(compatto=True)
 
     c_utente, c_esci = st.columns([5, 1])
     with c_utente:
