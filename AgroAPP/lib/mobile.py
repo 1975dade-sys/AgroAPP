@@ -14,6 +14,43 @@ def _css_responsive() -> str:
       --agroapp-green: #2d6a4f;
     }}
 
+    /* Allineamento a tema chiaro/scuro Streamlit (variabili ufficiali) */
+    [data-testid="stMetric"] {{
+      background: var(--secondary-background-color) !important;
+      border-radius: 12px;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid rgba(128, 128, 128, 0.2);
+    }}
+    [data-testid="stMetric"] label,
+    [data-testid="stMetric"] [data-testid="stMetricValue"],
+    [data-testid="stMetric"] [data-testid="stMetricDelta"] {{
+      color: var(--text-color) !important;
+    }}
+
+    [data-testid="stCaptionContainer"],
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] li {{
+      color: var(--text-color);
+    }}
+
+    div[data-testid="stRadio"] label {{
+      color: var(--text-color) !important;
+      background: var(--secondary-background-color) !important;
+    }}
+
+    header[data-testid="stHeader"] {{
+      background: var(--background-color) !important;
+      border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+    }}
+    header[data-testid="stHeader"] a,
+    header[data-testid="stHeader"] button {{
+      color: var(--text-color) !important;
+    }}
+
+    [data-testid="stVerticalBlockBorderWrapper"] {{
+      border-color: rgba(128, 128, 128, 0.25) !important;
+    }}
+
     /* Evita zoom automatico su iOS quando si tocca un campo */
     input, textarea, select {{
       font-size: 16px !important;
@@ -25,12 +62,6 @@ def _css_responsive() -> str:
       min-height: var(--agroapp-touch);
       border-radius: 10px;
       font-size: 1rem;
-    }}
-
-    [data-testid="stMetric"] {{
-      background: #f0f7f4;
-      border-radius: 12px;
-      padding: 0.65rem 0.85rem;
     }}
 
     [data-testid="stDataFrame"],
@@ -103,14 +134,9 @@ def _css_responsive() -> str:
         min-height: var(--agroapp-touch);
         padding: 0.5rem 0.75rem !important;
         border-radius: 10px;
-        background: #f8faf9;
       }}
 
       /* Menu in alto: scorrimento orizzontale */
-      header[data-testid="stHeader"] {{
-        background: #fff;
-        border-bottom: 1px solid #e8efe9;
-      }}
       header[data-testid="stHeader"] [data-testid="stToolbar"] {{
         max-width: 100%;
         overflow-x: auto;
@@ -197,7 +223,10 @@ def prepara_layout_operativo() -> None:
 
 
 def configura_mobile() -> None:
+    from lib.info_app import inietta_css_brand
+
     applica_stili_responsive()
+    inietta_css_brand()
     components.html(
         """
         <script>
