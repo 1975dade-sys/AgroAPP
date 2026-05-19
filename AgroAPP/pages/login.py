@@ -3,12 +3,14 @@ import streamlit as st
 from lib.auth import esegui_login, ruolo_da_tipo_accesso, utente_loggato, widget_esci_account
 from lib.info_app import render_titolo_agroapp
 from lib.mobile import submit_operazione
+from lib.theme_ui import render_selettore_tema
 from lib.utenti import ha_titolare
 
 if not ha_titolare():
     st.rerun()
 
 render_titolo_agroapp(livello=2)
+render_selettore_tema(compatto=True)
 
 if utente_loggato():
     widget_esci_account(key="esci_login")
