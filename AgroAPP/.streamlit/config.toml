@@ -2,8 +2,8 @@
 gatherUsageStats = false
 
 [client]
-# Nasconde menu sviluppatore e riduce la barra Streamlit (footer/toolbar).
-toolbarMode = "minimal"
+# "viewer": nasconde solo voci da sviluppatore; il menu ⋮ resta (tema chiaro/scuro).
+toolbarMode = "viewer"
 
 [server]
 headless = true
