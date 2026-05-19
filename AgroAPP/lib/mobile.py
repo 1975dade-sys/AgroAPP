@@ -51,6 +51,19 @@ def _css_responsive() -> str:
       border-color: rgba(128, 128, 128, 0.25) !important;
     }}
 
+    /* Branding Streamlit in basso (Made with Streamlit, deploy, status) */
+    footer,
+    [data-testid="stFooter"],
+    [data-testid="stStatusWidget"],
+    .stDeployButton,
+    [data-testid="stToolbarActions"] {{
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+    }}
+
     /* Evita zoom automatico su iOS quando si tocca un campo */
     input, textarea, select {{
       font-size: 16px !important;
