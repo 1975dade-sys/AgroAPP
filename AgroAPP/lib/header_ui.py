@@ -13,6 +13,7 @@ def render_barra_superiore() -> None:
     mansione = user.get("mansione", "")
 
     render_titolo_agroapp(livello=3)
+    st.caption("Tema chiaro/scuro: menu **⋮** in alto a destra → Settings → Theme.")
 
     c_utente, c_esci = st.columns([5, 1])
     with c_utente:
