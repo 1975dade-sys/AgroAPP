@@ -51,17 +51,41 @@ def _css_responsive() -> str:
       border-color: rgba(128, 128, 128, 0.25) !important;
     }}
 
-    /* Branding Streamlit in basso (Made with Streamlit, deploy, status) */
+    /* Desktop: footer Streamlit nascosto (il menu tema resta in alto ⋮) */
     footer,
-    [data-testid="stFooter"],
-    [data-testid="stStatusWidget"],
-    .stDeployButton,
-    [data-testid="stToolbarActions"] {{
+    [data-testid="stFooter"] {{
       display: none !important;
       visibility: hidden !important;
       height: 0 !important;
-      min-height: 0 !important;
-      overflow: hidden !important;
+      pointer-events: none !important;
+    }}
+
+    /* Smartphone: icone/link Streamlit in basso o nell'header (no menu impostazioni) */
+    @media (max-width: {_BREAKPOINT}) {{
+      footer,
+      [data-testid="stFooter"],
+      [data-testid="stStatusWidget"],
+      [data-testid="stToolbarActions"],
+      .stDeployButton,
+      [data-testid="stHeader"] a[href*="streamlit.io"],
+      [data-testid="stHeader"] button[title*="Deploy"],
+      [data-testid="stHeader"] button[title*="deploy"] {{
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }}
+
+      /* Spazio in fondo: niente tap accidentali sul bordo */
+      section.main .block-container {{
+        padding-bottom: calc(6rem + env(safe-area-inset-bottom)) !important;
+      }}
     }}
 
     /* Evita zoom automatico su iOS quando si tocca un campo */
@@ -247,6 +271,40 @@ def configura_mobile() -> None:
           const win = window.parent;
           const doc = win.document;
           const head = doc.head;
+
+          function hideStreamlitChrome() {
+            const mobile = win.matchMedia('(max-width: 768px)').matches;
+            const sel = [
+              'footer',
+              '[data-testid="stFooter"]',
+              '[data-testid="stStatusWidget"]',
+              '[data-testid="stToolbarActions"]',
+              '.stDeployButton'
+            ].join(',');
+            doc.querySelectorAll(sel).forEach(function (el) {
+              el.style.setProperty('display', 'none', 'important');
+              el.style.setProperty('pointer-events', 'none', 'important');
+              el.style.setProperty('height', '0', 'important');
+              el.style.setProperty('opacity', '0', 'important');
+            });
+            if (mobile) {
+              doc.querySelectorAll('a[href*="streamlit.io"]').forEach(function (a) {
+                if (a.closest('footer') || a.closest('[data-testid="stHeader"]')) {
+                  a.style.setProperty('display', 'none', 'important');
+                  a.style.setProperty('pointer-events', 'none', 'important');
+                }
+              });
+            }
+          }
+          hideStreamlitChrome();
+          win.addEventListener('resize', hideStreamlitChrome);
+          if (win.MutationObserver && doc.body) {
+            new win.MutationObserver(hideStreamlitChrome).observe(doc.body, {
+              childList: true,
+              subtree: true
+            });
+          }
+
           if (head.querySelector('meta[data-agroapp-viewport]')) {
             doc.body.classList.remove('agroapp-drawer-open');
             return;
