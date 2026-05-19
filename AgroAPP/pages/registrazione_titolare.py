@@ -3,12 +3,14 @@ import streamlit as st
 from lib.auth import imposta_sessione
 from lib.info_app import render_titolo_agroapp
 from lib.mobile import submit_operazione
+from lib.theme_ui import render_selettore_tema
 from lib.utenti import ha_titolare, registra_titolare
 
 if ha_titolare():
     st.rerun()
 
 render_titolo_agroapp(livello=2)
+render_selettore_tema(compatto=True)
 st.caption("Primo avvio — crea l'account del titolare dell'azienda.")
 st.info(
     "Il titolare configura anagrafiche, campi e credenziali degli operatori. "
